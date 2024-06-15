@@ -1,0 +1,29 @@
+[package]
+name = "ai-tool"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[lib]
+name = "ai_tool"
+crate-type = ["cdylib"]
+
+[dependencies]
+bincode = "1.3.3"
+crossbeam = "0.8.4"
+pyo3 = { version = "0.21.2" }
+rayon = "1.10.0"
+serde = { version = "1.0.200", features = ["derive"] }
+
+[dev-dependencies]
+derive-debug = "0.1.2"
+num_cpus = "1.16.0"
+
+[profile.release]
+opt-level = 3
+
+[target.'cfg(windows)'.dependencies]
+winapi = { version = "0.3.9", features = ["winnt", "memoryapi"] }
+
+[target.'cfg(unix)'.dependencies]
+libc = "0.2.155"

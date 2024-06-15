@@ -1,0 +1,19 @@
+name: Env Info
+on: push
+
+jobs:
+  setup-node:
+    name: Nodejs Setup
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 'latest'
+
+  run-info:
+    needs: setup-node
+    name: Check Info
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - run: node actions/index.js
