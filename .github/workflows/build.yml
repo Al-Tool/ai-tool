@@ -3,7 +3,6 @@ on: [push, pull_request]
 
 jobs:
   windows-build:
-    needs: linux-build
     name: Windows Build
     runs-on: windows-latest
     permissions:
