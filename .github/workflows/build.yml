@@ -23,7 +23,7 @@ jobs:
         git add -f target/wheels/
         git mv target/wheels/ wheels/
         git commit -m "Windows Wheels build"
-        git push origin HEAD:branch
+        git push origin HEAD:main
         
   linux-build:
     name: Linux Build
@@ -46,7 +46,7 @@ jobs:
         git add -f target/wheels/
         git mv target/wheels/ wheels/
         git commit -m "Linux Wheels build"
-        git push origin HEAD:branch
+        git push origin HEAD:main
 
   pypi-publish:
     needs: [windows-build, linux-build]
