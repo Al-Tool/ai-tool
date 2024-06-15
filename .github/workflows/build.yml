@@ -2,64 +2,28 @@ name: Build
 on: [push, pull_request]
 
 jobs:
-  windows-build:
-    name: Windows Build
+  build:
+    name: ${{ matrix.os }} Build
     runs-on: windows-latest
-    permissions:
-      contents: write
-
-    if: ${{ github.actor }} != "GitHub Action"
-    steps:
-    - uses: actions/checkout@v4
-    - uses: PyO3/maturin-action@v1.43.0
-      with:
-        args: --release
-        rust-toolchain: nightly-x86_64-pc-windows-msvc
-    - run: |
-        git fetch origin
-        git checkout origin/main
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
-        git add -f target/wheels/
-        git mv target/wheels/ wheels/
-        git commit -m "Windows Wheels build"
-        git push origin HEAD:main
-        
-  linux-build:
-    name: Linux Build
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-
-    if: ${{ github.actor }} != "GitHub Action"
-    steps:
-    - uses: actions/checkout@v4
-    - uses: PyO3/maturin-action@v1.43.0
-      with:
-        args: --release
-        rust-toolchain: nightly-x86_64-unknown-linux-gnu
-    - run: |
-        git fetch origin
-        git checkout origin/main
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
-        git add -f target/wheels/
-        git mv target/wheels/ wheels/
-        git commit -m "Linux Wheels build"
-        git push origin HEAD:main
-
-  pypi-publish:
-    needs: [windows-build, linux-build]
-    name: PyPi Publish
-    runs-on: ubuntu-latest
     environment:
       name: pypi
       url: https://pypi.org/p/light-ai-tool
 
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+
     permissions:
+      contents: write
       id-token: write
 
+    if: ${{ github.actor }} != "GitHub Action"
     steps:
+    - uses: actions/checkout@v4
+    - uses: PyO3/maturin-action@v1.43.0
+      with:
+        args: --release
+        
     - if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
       uses: pypa/gh-action-pypi-publish@release/v1
       with:
