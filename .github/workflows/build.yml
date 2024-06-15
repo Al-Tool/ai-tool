@@ -17,6 +17,8 @@ jobs:
         args: --release
         rust-toolchain: nightly-x86_64-pc-windows-msvc
     - run: |
+        git fetch origin
+        git checkout origin/main
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
         git add -f target/wheels/
@@ -38,6 +40,8 @@ jobs:
         args: --release
         rust-toolchain: nightly-x86_64-unknown-linux-gnu
     - run: |
+        git fetch origin
+        git checkout origin/main
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
         git add -f target/wheels/
